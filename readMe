@@ -1,0 +1,13 @@
+
+pip3 install ConfigParser -i https://pypi.douban.com/simple
+pip3 install mysqlclient -i https://pypi.douban.com/simple
+后台运行 setsid python3 Main.py
+查询进程 ps -ef | grep WeChatRobot
+
+返回json
+    all = Click.objects.values()
+    return JSONResponse({"res":"success", "msg":all})
+
+基金：
+202005 南方成分精选混合
+001426 南方大数据300c
