@@ -1,9 +1,6 @@
 import re, os, sys, subprocess, copy, traceback, logging
 
-try:
-    from HTMLParser import HTMLParser
-except ImportError:
-    from html.parser import HTMLParser
+from html.parser import HTMLParser
 
 import requests
 

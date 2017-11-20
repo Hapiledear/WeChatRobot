@@ -31,10 +31,10 @@ def exitHandle():
 
 @itchat.msg_register(itchat.content.TEXT, isFriendChat=True, isGroupChat=True, isMpChat=True)
 def print_content(msg):
-    logger.info('%s: %s' % (msg.type, msg.text))
+    logger.debug('%s: %s' % (msg.type, msg.text))
     reqMsg = msg.text
-    if isinstance(reqMsg, str) and reqMsg.startswith(r"玄姬，") and msg['content']['type'] == 0:
-        msgObj = getReturnMessage(reqMsg, msg['user']['id'])
+    if isinstance(reqMsg, str) and reqMsg.startswith(r"玄姬，"):
+        msgObj = getReturnMessage(reqMsg,msg.FromUserName)
         if msgObj.onlyOneMsg():
             msg.user.send(msgObj.msgs)
         else:
@@ -44,4 +44,4 @@ def print_content(msg):
 
 if __name__ == '__main__':
     itchat.auto_login(enableCmdQR=2, loginCallback=loginSuccessHandle, exitCallback=exitHandle)
-    itchat.run(debug=True)
+    itchat.run(debug=False)

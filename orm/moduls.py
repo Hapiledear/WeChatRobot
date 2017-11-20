@@ -50,4 +50,9 @@ class Chats(models.Model):
     def __unicode__(self):
         return self.c_name
 
-
+class FundationObject(models.Model):
+    fun_code = models.CharField()
+    fun_name = models.CharField()
+    acc_grow = models.CharField()
+    predict_grow = models.CharField()
+    predict_grow_int = models.IntegerField()
