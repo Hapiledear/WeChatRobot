@@ -3,6 +3,7 @@ import logging
 import re
 
 import requests
+import time
 
 from orm.moduls import FundationObject
 
@@ -19,10 +20,10 @@ class Fundation(object):
     session.headers.update(header_info)
     start_url = "http://fund.eastmoney.com/{0}.html?spm=search"
 
-    fundCodes = ['001426', '202005', '004450', '040015', '001986', '159916', '162213', '340007', '040008', '002851',
+    fundCodes = ['001426', '202005', '004450', '159916', '162213', '340007', '040008', '002851',
                  '050002', '161725', '340008', '001616', '002984', '001542']
 
-    def startScrapy(self,type):
+    def startScrapy(self, type):
         resMsg = "每日基金定时播报(估算):\n"
         resMsg2 = "今日基金实际涨势:\n"
         fundObjList = []
@@ -32,7 +33,13 @@ class Fundation(object):
             fundObj = self.parseResponse(response, fundCode)
             fundObjList.append(fundObj)
 
-        sorted_list =  sorted(fundObjList, key=lambda fund: fund.predict_grow_int)
+        sorted_list = sorted(fundObjList, key=lambda fund: fund.predict_grow_int)
+        if type == 0:
+            n_hour = time.localtime(time.time())[3]
+            if int(n_hour) >= 22:
+                type = 2
+            else:
+                type = 1
         if type == 1:
             for fundObj in sorted_list:
                 resMsg = resMsg + fundObj.fun_name + ":" + fundObj.predict_grow + "\n"
@@ -79,6 +86,6 @@ def percent_to_int(string):
         LOGGER.info("你输入的不是百分比！")
 
 
-# if __name__ == '__main__':
-#     fund = Fundation()
-#     resMsg = fund.startScrapy()
+        # if __name__ == '__main__':
+        #     fund = Fundation()
+        #     resMsg = fund.startScrapy()

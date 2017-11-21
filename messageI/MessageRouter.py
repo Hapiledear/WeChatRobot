@@ -12,7 +12,7 @@ def getReturnMessage(msg, id):
         return getMsgFromZhihuDaly(msg,id)
     elif "基金" in msg:
         fund = Fundation()
-        resMsg = fund.startScrapy()
+        resMsg = fund.startScrapy(type=0)
         backMsg = BackMsg(resMsg,id)
         return backMsg
     else:
