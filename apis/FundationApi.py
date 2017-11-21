@@ -22,8 +22,9 @@ class Fundation(object):
     fundCodes = ['001426', '202005', '004450', '040015', '001986', '159916', '162213', '340007', '040008', '002851',
                  '050002', '161725', '340008', '001616', '002984', '001542']
 
-    def startScrapy(self):
+    def startScrapy(self,type):
         resMsg = "每日基金定时播报(估算):\n"
+        resMsg2 = "今日基金实际涨势:\n"
         fundObjList = []
         for fundCode in self.fundCodes:
             reqUrl = self.start_url.format(fundCode)
@@ -32,9 +33,14 @@ class Fundation(object):
             fundObjList.append(fundObj)
 
         sorted_list =  sorted(fundObjList, key=lambda fund: fund.predict_grow_int)
-        for fundObj in sorted_list:
-            resMsg = resMsg + fundObj.fun_name + ":" + fundObj.predict_grow + "\n"
-        return resMsg
+        if type == 1:
+            for fundObj in sorted_list:
+                resMsg = resMsg + fundObj.fun_name + ":" + fundObj.predict_grow + "\n"
+            return resMsg
+        elif type == 2:
+            for fundObj in sorted_list:
+                resMsg2 = resMsg2 + fundObj.fun_name + ":" + fundObj.acc_grow + "\n"
+            return resMsg2
 
     def parseResponse(self, response, fundCode='0000'):
 
