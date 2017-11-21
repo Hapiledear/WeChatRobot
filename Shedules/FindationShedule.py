@@ -12,6 +12,8 @@ from apis.FundationApi import Fundation
 
 LOGGER = logging.getLogger(__name__)
 
+_schedual = ""
+
 
 def start_apshedule():
     targets = itchat.search_chatrooms(name='奔小康')
@@ -23,13 +25,22 @@ def start_apshedule():
         LOGGER.warning("未找到相关群聊，请检查是否变更了群名称")
 
     sched = BackgroundScheduler()
-    sched.add_job(func=scrapAndSenFinMsg, args=[userNames],trigger='cron', name='基金查询', id='scrap_fin', minute='0/15',hour='9-14',day_of_week='0/4')
+    # sched.add_job(func=scrapAndSenFinMsg, args=[userNames],trigger='cron', name='基金查询', id='scrap_fin', minute='0/15',hour='9-14',day_of_week='0/4')
+    sched.add_job(func=scrapAndSenFinMsg, args=[userNames], trigger='cron', name='基金查询', id='scrap_fin', minute='0/2',
+                  hour='19-21', day_of_week='1/5')
     sched.start()
+    global _schedual
+    _schedual = sched
+
+
+def stop_apshedule():
+    _schedual.shutdown()
 
 
 def scrapAndSenFinMsg(userNames):
     LOGGER.info("开始执行基金查询任务")
     fund = Fundation()
     resMsg = fund.startScrapy()
-    for userName in userNames:
-        itchat.send_msg(resMsg, toUserName=userName)
+    LOGGER.info(resMsg)
+    # for userName in userNames:
+    #     itchat.send_msg(resMsg, toUserName=userName)

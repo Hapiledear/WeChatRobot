@@ -8,6 +8,7 @@ pip3 install mysqlclient -i https://pypi.douban.com/simple
     all = Click.objects.values()
     return JSONResponse({"res":"success", "msg":all})
 
-基金：
-202005 南方成分精选混合
-001426 南方大数据300c
+todo
+1.基金入库
+2.数据入库
+3.晚上九点半查询实际涨幅

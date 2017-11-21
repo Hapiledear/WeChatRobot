@@ -27,6 +27,7 @@ def loginSuccessHandle():
 
 def exitHandle():
     logger.info("exit")
+    FindationShedule.stop_apshedule()
 
 
 @itchat.msg_register(itchat.content.TEXT, isFriendChat=True, isGroupChat=True, isMpChat=True)
@@ -44,4 +45,4 @@ def print_content(msg):
 
 if __name__ == '__main__':
     itchat.auto_login(enableCmdQR=2, loginCallback=loginSuccessHandle, exitCallback=exitHandle)
-    itchat.run(debug=False)
+    itchat.run(debug=True)

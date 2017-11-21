@@ -44,7 +44,7 @@ class Fundation(object):
         fundName = html.xpath('//*[@id="body"]/div[9]/div/div/a[3]')[0].text
         acc_grow = html.xpath('//*[@id="body"]/div[12]/div/div/div[2]/div[1]/div[1]/dl[2]/dd[1]/span[2]')[0].text
         predict_grow = html.xpath('//*[@id="gz_gszzl"]')[0].text
-        LOGGER.debug("基金名称 %s " % fundName)
+        LOGGER.info("基金名称 %s " % fundName)
 
         fundObj = FundationObject()
         fundObj.fun_code = fundCode
