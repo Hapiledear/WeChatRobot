@@ -25,13 +25,12 @@ def start_apshedule():
         LOGGER.warning("未找到相关群聊，请检查是否变更了群名称")
 
     sched = BackgroundScheduler()
-    sched.add_job(func=scrapAndSenFinMsg, args=[userNames],trigger='cron', name='基金查询_预估值', id='scrap_fin', minute='0/15',hour='9-14',day_of_week='1/5')
+    sched.add_job(func=scrapAndSenFinMsg, args=[userNames],trigger='cron', name='基金查询_预估值', id='scrap_fin', minute='0,15,30,45',hour='9-14',day_of_week='1/5')
     sched.add_job(func=scrapAndSenFinAccMsg, args=[userNames],trigger='cron', name='基金查询_实际值', id='scrap_fin_acc', minute='1',hour='22',day_of_week='1/5')
 
     sched.start()
     global _schedual
     _schedual = sched
-
 
 def stop_apshedule():
     _schedual.shutdown()
