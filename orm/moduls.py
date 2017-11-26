@@ -8,14 +8,15 @@ from sqlalchemy import *
 from sqlalchemy.ext.declarative import declarative_base
 
 # 设置数据库信息
-from sqlalchemy.orm import sessionmaker
+mysql_test = "mysql+pymysql://yanghuang:19951015@172.16.20.55:3306/wcr?charset=utf8"
+mysql_conn = "mysql+pymysql://yanghuang:19951015@47.96.30.206:3306/wcr?charset=utf8"
 
-engine = create_engine("mysql+pymysql://yanghuang:19951015@172.16.20.55:3306/wcr?charset=utf8", max_overflow=5)
+engine = create_engine(mysql_conn, max_overflow=5)
 # 生成一个SqlORM 基类
 Base = declarative_base()
 
 
-# 构造ORM的对象
+# 构造ORM的
 class FundationObject(Base):
     __tablename__ = 'fundation'
     id = Column(Integer,primary_key=True, autoincrement='ignore_fk')
