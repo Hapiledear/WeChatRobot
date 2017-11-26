@@ -1,58 +1,38 @@
 # -*- coding: utf-8 -*-
-import os
-
-import django
-from django.conf import settings
-
-# 外部调用django时，需要设置django相关环境变量
 
 # 设置INSTALLED_APPS信息
-INSTALLED_APPS = [
-    'orm',
-    # 'django.contrib.admin',
-    # 'django.contrib.auth',
-    # 'django.contrib.contenttypes',
-    # 'django.contrib.sessions',
-    # 'django.contrib.messages',
-    # 'django.contrib.staticfiles',
-]
-# 设置数据库信息
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',  # mysql的engine
-        'NAME': 'wcr',  # 数据库名称
-        'USER': 'yanghuang',  # 数据库用户名
-        'PASSWORD': '19951015',  # 数据库密码
-        'HOST': '172.16.20.55',  # 主机地址
-        'PORT': '3306',  # 数据库端口号
-    }
-}
-# 给Django配置相关信息
-settings.configure(DATABASES=DATABASES, INSTALLED_APPS=INSTALLED_APPS)
-# 启动Django
-django.setup()
+import sqlalchemy
+from datetime import date
+from sqlalchemy import *
 
-from django.db import models
+from sqlalchemy.ext.declarative import declarative_base
+
+# 设置数据库信息
+from sqlalchemy.orm import sessionmaker
+
+engine = create_engine("mysql+pymysql://yanghuang:19951015@172.16.20.55:3306/wcr?charset=utf8", max_overflow=5)
+# 生成一个SqlORM 基类
+Base = declarative_base()
 
 
 # 构造ORM的对象
-class Chats(models.Model):
-    C_TYPE_CHOICES = (('1','个人'),('2',"群聊"))
-    DEL_FLG_CHOICES = (('0','删除'),('1','正常'))
-    id = models.CharField(primary_key=True,max_length=32)
-    c_name = models.CharField(max_length=32)
-    c_type = models.CharField(max_length=1,choices=C_TYPE_CHOICES)
-    del_flg = models.CharField(max_length=1,choices=DEL_FLG_CHOICES,default='1')
+class FundationObject(Base):
+    __tablename__ = 'fundation'
+    id = Column(Integer,primary_key=True, autoincrement='ignore_fk')
+    fun_code = Column(String(10))
+    fun_name = Column(String(100))
+    acc_grow = Column(String(10))
+    acc_grow_int = Column(Integer)
+    predict_grow = Column(String(10))
+    predict_grow_int = Column(INTEGER)
+    date = Column('t_date', String(8))
 
-    class Meta:
-        db_table = 'chats'
 
-    def __unicode__(self):
-        return self.c_name
-
-class FundationObject(models.Model):
-    fun_code = models.CharField()
-    fun_name = models.CharField()
-    acc_grow = models.CharField()
-    predict_grow = models.CharField()
-    predict_grow_int = models.IntegerField()
+class ChatSubjectFundation(Base):
+    __tablename__ = 'chat_sub_fun'
+    u_id = Column(String(36), primary_key=True)
+    chat_name = Column(String(100))
+    target_code = Column(String(10))
+    target_name = Column(String(100))
+    del_flag = Column(Boolean)
+    send_type = Column(String(1), server_default='1')

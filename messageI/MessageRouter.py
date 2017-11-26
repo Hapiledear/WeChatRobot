@@ -7,13 +7,13 @@ from apis.ZhihuDalyAip import getMsgFromZhihuDaly
 from messageI.BackMsg import BackMsg
 
 
-def getReturnMessage(msg, id):
+def getReturnMessage(msg, id, userName):
     if "知乎日报" in msg:
-        return getMsgFromZhihuDaly(msg,id)
+        return getMsgFromZhihuDaly(msg, id)
     elif "基金" in msg:
-        fund = Fundation()
+        fund = Fundation([userName])
         resMsg = fund.startScrapy(type=0)
-        backMsg = BackMsg(resMsg,id)
+        backMsg = BackMsg(resMsg, id)
         return backMsg
     else:
         return getMsgFromTuring(msg, id)

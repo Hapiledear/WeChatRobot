@@ -53,7 +53,7 @@ def stop_apshedule():
 
 def scrapAndSenFinMsg(userNames):
     LOGGER.info("开始执行基金查询任务")
-    fund = Fundation()
+    fund = Fundation(userNames)
     resMsg = fund.startScrapy(type=1)
     LOGGER.debug(resMsg)
     for userName in userNames:
@@ -62,7 +62,7 @@ def scrapAndSenFinMsg(userNames):
 
 def scrapAndSenFinAccMsg(userNames):
     LOGGER.info("开始执行基金查询任务")
-    fund = Fundation()
+    fund = Fundation(userNames)
     resMsg = fund.startScrapy(type=2)
     LOGGER.debug(resMsg)
     for userName in userNames:
