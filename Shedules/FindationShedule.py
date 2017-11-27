@@ -28,13 +28,13 @@ _schedual = ""
 
 
 def start_apshedule():
-    targets = itchat.search_chatrooms(name='奔小康')
-    userNames = []
-    if targets:
-        for target in targets:
-            userNames.append(target.UserName)
-    else:
-        LOGGER.warning("未找到相关群聊，请检查是否变更了群名称")
+    # targets = itchat.search_chatrooms(name='奔小康')
+    userNames = ['奔小康']
+    # if targets:
+    #     for target in targets:
+    #         userNames.append(target.UserName)
+    # else:
+    #     LOGGER.warning("未找到相关群聊，请检查是否变更了群名称")
 
     sched = BackgroundScheduler(daemonic=False)
     sched._logger = LOGGER
