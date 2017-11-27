@@ -9,6 +9,7 @@ from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from apis.FundationApi import Fundation
+from messageI.MessageRouter import sendMsgByNickNames
 
 LOGGER = logging.getLogger(__name__)
 #
@@ -36,6 +37,9 @@ def start_apshedule():
                   trigger='cron', name='基金查询_预估值', id='scrap_fin', minute='0,15,30,45', hour='9-14', day_of_week='0-4')
     sched.add_job(func=scrapAndSenFinAccMsg, args=[nickNames], replace_existing=True, misfire_grace_time=3,
                   trigger='cron', name='基金查询_实际值', id='scrap_fin_acc', minute='1', hour='22', day_of_week='0-4')
+    #
+    # sched.add_job(func=scrapAndSenFinMsg, args=[nickNames], replace_existing=True, misfire_grace_time=3,
+    #               trigger='cron', name='基金查询_测试', id='scrap_fin_test', minute='0/2')
     sched.start()
     global _schedual
     _schedual = sched
@@ -50,19 +54,7 @@ def scrapAndSenFinMsg(nickNames):
     fund = Fundation(nickNames)
     resMsg = fund.startScrapy(type=1)
     LOGGER.debug(resMsg)
-
-    targets = []
-    if nickNames:
-        for nickName in nickNames:
-            targets.append(itchat.search_chatrooms(name=nickName))
-    userNames = []
-    if targets:
-        for target in targets:
-            userNames.append(target.UserName)
-    else:
-        LOGGER.warning("未找到相关群聊，请检查是否变更了群名称")
-    for userName in userNames:
-        itchat.send_msg(resMsg, toUserName=userName)
+    sendMsgByNickNames(resMsg, nickNames)
 
 
 def scrapAndSenFinAccMsg(nickNames):
@@ -70,16 +62,4 @@ def scrapAndSenFinAccMsg(nickNames):
     fund = Fundation(nickNames)
     resMsg = fund.startScrapy(type=2)
     LOGGER.debug(resMsg)
-
-    targets = []
-    if nickNames:
-        for nickName in nickNames:
-            targets.append(itchat.search_chatrooms(name=nickName))
-    userNames = []
-    if targets:
-        for target in targets:
-            userNames.append(target.UserName)
-    else:
-        LOGGER.warning("未找到相关群聊，请检查是否变更了群名称")
-    for userName in userNames:
-        itchat.send_msg(resMsg, toUserName=userName)
+    sendMsgByNickNames(resMsg, nickNames)
