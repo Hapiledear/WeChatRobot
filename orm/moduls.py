@@ -11,7 +11,7 @@ from sqlalchemy.ext.declarative import declarative_base
 mysql_test = "mysql+pymysql://yanghuang:19951015@172.16.20.55:3306/wcr?charset=utf8"
 mysql_conn = "mysql+pymysql://yanghuang:19951015@47.96.30.206:3306/wcr?charset=utf8"
 
-engine = create_engine(mysql_conn, max_overflow=5)
+engine = create_engine(mysql_conn, max_overflow=5,pool_timeout=3000)
 # 生成一个SqlORM 基类
 Base = declarative_base()
 
