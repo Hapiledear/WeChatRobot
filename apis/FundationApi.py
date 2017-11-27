@@ -50,7 +50,7 @@ class Fundation(object):
     def startScrapy(self, type):
         resMsg = "每日基金定时播报(估算):\n"
         resMsg2 = "今日基金实际涨势:\n"
-        print("%s 的基金订阅:%s" % (self.userNames, self.fundCodes_from_db))
+        LOGGER.info("%s 的基金订阅:%s" % (self.userNames, self.fundCodes_from_db))
         if len(self.fundCodes_from_db) == 0:
             return "暂无基金订阅"
 
