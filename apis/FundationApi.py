@@ -89,7 +89,7 @@ class Fundation(object):
             fundObj.fun_code = resJson['fundcode']
             fundObj.fun_name = resJson['name']
             fundObj.predict_grow = resJson['gszzl'] + "%"
-            fundObj.predict_grow_int = resJson['gszzl']
+            fundObj.predict_grow_int = float(resJson['gszzl'])
             fundObj.date = date.today().strftime('%Y-%m-%d')
             f_list.append(fundObj)
         sorted_list = sorted(f_list, key=lambda fund: fund.predict_grow_int)
