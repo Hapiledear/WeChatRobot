@@ -9,6 +9,7 @@ pip3 install mysqlclient -i https://pypi.douban.com/simple
     return JSONResponse({"res":"success", "msg":all})
 
 todo
-1.基金入库
-2.数据入库
-3.晚上九点半查询实际涨幅
+美剧信息爬取：
+1.放送时间表
+2.云盘+磁力链接
+3.引入上下文

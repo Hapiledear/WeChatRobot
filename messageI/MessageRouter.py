@@ -20,6 +20,9 @@ def getReturnMessage(msg, id, userName):
         resMsg = fund.startScrapy(type=0)
         backMsg = BackMsg(resMsg, id)
         return backMsg
+    elif "美剧" in msg:
+
+        pass
     else:
         return getMsgFromTuring(msg, id)
 
