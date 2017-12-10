@@ -75,8 +75,8 @@ def mpChat(msg):
 
 
 if __name__ == '__main__':
-    # itchat.auto_login(enableCmdQR=2, loginCallback=loginSuccessHandle, exitCallback=exitHandle)
-    # itchat.run(debug=True)
+    itchat.auto_login(enableCmdQR=2, loginCallback=loginSuccessHandle, exitCallback=exitHandle)
+    itchat.run(debug=True)
 
-    tv = AmericanTVApi("self")
-    tv.scrapyTvInfo("绿箭侠第六季")
+    # tv = AmericanTVApi("self")
+    # tv.scrapyTvInfo("绿箭侠第六季")
