@@ -5,8 +5,10 @@ import re
 import uuid
 
 import requests
+from sqlalchemy import and_, or_
+from sqlalchemy.orm import sessionmaker
 
-from orm.moduls import AmericanTV, AmericanTVSets
+from orm.moduls import AmericanTV, AmericanTVSets, engine
 
 LOGGER = logging.getLogger(__name__)
 re_tiantian_code = r'\w+(?=\.html)'
@@ -33,7 +35,8 @@ class AmericanTVApi(object):
     def scrapyTvInfo(self, tvName):
 
         aTv = AmericanTV()
-        aTv.u_id = uuid.uuid1()
+        aTv.u_id = str(uuid.uuid1())
+        aTv.tv_name = tvName
         # 豆瓣相关信息
         reqUrl = self.url_douban_search.format(tvName)
         LOGGER.debug("请求url=%s " % reqUrl)
@@ -41,7 +44,6 @@ class AmericanTVApi(object):
         resJson = json.loads(response.text)
         if resJson:
             aTv.douban_code = resJson[0]['id']
-            aTv.tv_name = resJson[0]['title']
             # 评分和放送状态由另一定时任务统一抓取后赋值更新
         else:
             LOGGER.info("豆瓣中未找到相关信息，请重新编写关键字")
@@ -76,6 +78,7 @@ class AmericanTVApi(object):
         aTv.setIntState(tvDetail[11])
         aTv.story_type = tvDetail[5]
         # print(etree.tostring(tvDetail))
+
 
         # 天天美剧详细信息 每集资源
         urls = html.xpath("/html/body/section/div[2]/div/article/ol/li/a")
@@ -122,20 +125,39 @@ class AmericanTVApi(object):
                 LOGGER.info("%s 暂无资源" % aTv.tv_name)
             setsNum = max(len(baidu_cloud_urls), len(magnet_urls), len(ed2k_urls))
 
+        tvSets = []
         for i in range(setsNum):
             tvSet = AmericanTVSets()
-            tvSet.u_id = uuid.uuid1()
-            tvSet.p_id = aTv.u_id
+            tvSet.u_id = str(uuid.uuid1())
             tvSet.set_ordinal = i + 1
-            if i < len(baidu_cloud_urls) - 1:
+            if i < len(baidu_cloud_urls):
                 tvSet.baidu_cloud_url = baidu_cloud_urls[i]
-            if i < len(magnet_urls) - 1:
+            if i < len(magnet_urls):
                 tvSet.magnet_url = magnet_urls[i]
-            if i < len(ed2k_urls) - 1:
+            if i < len(ed2k_urls):
                 tvSet.ed2k_url = ed2k_urls[i]
-            # print(tvSet)
+                # print(tvSet)
+            tvSets.append(tvSet)
 
+        Session = sessionmaker(bind=engine)
+        db_session = Session()
+        try:
+            self.storeIntoDb(aTv, db_session)
+            for tvSet in tvSets:
+                self.storeIntoDb(tvSet, db_session,aTv.u_id)
+        finally:
+            db_session.commit()
+            db_session.close()
 
-if __name__ == '__main__':
-    tv = AmericanTVApi("self")
-    tv.scrapyTvInfo("绿箭侠第六季")
+    def storeIntoDb(self, obj, session, *pId):
+        if isinstance(obj, AmericanTVSets):
+            obj.p_id = pId
+            res = session.query(AmericanTVSets).filter(
+                and_(AmericanTVSets.p_id == obj.p_id, AmericanTVSets.set_ordinal == obj.set_ordinal)).first()
+            if res is not None:
+                obj.u_id = res.u_id
+        if isinstance(obj, AmericanTV):
+            res = session.query(AmericanTV).filter(AmericanTV.tv_name == obj.tv_name).first()
+            if res is not None:
+                obj.u_id = res.u_id
+        session.merge(obj)
