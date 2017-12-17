@@ -15,3 +15,9 @@ class BackMsg(object):
 
     def onlyOneMsg(self):
         return isinstance(self.msgs, str)
+
+class MsgSendObj(object):
+
+    def __init__(self,nickName,msgs):
+        self.nickName = nickName
+        self.msgs = msgs

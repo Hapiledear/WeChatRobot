@@ -49,7 +49,7 @@ class AmericanTV(Base):
     send_date = Column(DATE)
     send_week = Column(String(1))
     state = Column(String(1))
-    story_type = Column(String(10))
+    story_type = Column(String(100))
 
 
     def setSendDateAndWeek(self,dateWeekly):
@@ -90,3 +90,14 @@ class AmericanTVSets(Base):
     baidu_cloud_url = Column(String(100))
     magnet_url = Column(String(1000))
     ed2k_url = Column(String(1000))
+
+
+class ChatSubAmercanTv(Base):
+    __tablename__ = 'chat_sub_amerTv'
+    u_id = Column(String(36), primary_key=True)
+    chat_name = Column(String(100))
+    american_tv = Column(String(36))
+    tv_name = Column(String(200))
+    have_updated = Column(String(1))
+    new_set_id = Column(String(36))
+

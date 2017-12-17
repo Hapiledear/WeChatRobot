@@ -4,6 +4,7 @@ import logging
 import itchat
 
 from Shedules import FindationShedule
+from Shedules.AmericanTvShedule import scrapAmericanTv
 from apis.AmericanTV import AmericanTVApi
 from logConfig import setup_logging
 from messageI.MessageRouter import getReturnMessage
@@ -77,6 +78,3 @@ def mpChat(msg):
 if __name__ == '__main__':
     itchat.auto_login(enableCmdQR=2, loginCallback=loginSuccessHandle, exitCallback=exitHandle)
     itchat.run(debug=True)
-
-    # tv = AmericanTVApi("self")
-    # tv.scrapyTvInfo("绿箭侠第六季")

@@ -26,7 +26,7 @@ def getReturnMessage(msg, id, userName):
     else:
         return getMsgFromTuring(msg, id)
 
-
+# 此方法主要用于定时任务，可以主动向他人推送消息
 def sendMsgByNickNames(resMsg, nickNames):
     targets = []
     if nickNames:
@@ -45,3 +45,22 @@ def sendMsgByNickNames(resMsg, nickNames):
         LOGGER.warning("未找到相关群聊，请检查是否变更了群名称")
     for userName in userNames:
         itchat.send_msg(resMsg, toUserName=userName)
+
+# 此方法主要用于定时任务，可以主动向他人推送消息
+def sendMsgByMsgSendObj(msgSendObj):
+    targets = []
+    ls = itchat.search_chatrooms(name=msgSendObj.nickName)
+    if len(ls) == 1:
+        targets.append(ls[0])
+    elif len(ls) > 1:
+        LOGGER.info("%s 找到多个群，只取第一个%s" % (msgSendObj.nickName, ls))
+        targets.append(ls[0])
+
+    userNames = []
+    if targets:
+        for target in targets:
+            userNames.append(target.UserName)
+    else:
+        LOGGER.warning("未找到相关群聊，请检查是否变更了群名称")
+    for userName in userNames:
+        itchat.send_msg(msgSendObj.msgs, toUserName=userName)
